@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Topic
+from .forms import TopicForm
 
 def index(request):
     """The home page for Tech Journal."""
@@ -18,3 +19,19 @@ def topic(request, topic_id): # topic_id is a parameter that matches the value c
     entries = topic.entry_set.order_by('-date_added') 
     context = {'topic': topic, 'entries': entries} # Pass the topic and its associated entries to the template.
     return render(request, 'tech_journal/topic.html', context)
+
+def new_topic(request):
+    """Add a new topic."""
+    if request.method != 'POST':
+        # No data submitted; create a blank form.
+        form = TopicForm()
+    else:
+        # POST data submitted; process data.
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tech_journal:topics') # Redirect the user to the topics page.
+    
+    # Display a blank or invalid form.
+    context = {'form': form}
+    return render(request, 'tech_journal/new_topic.html', context)
