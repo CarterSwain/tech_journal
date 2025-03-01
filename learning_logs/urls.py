@@ -4,7 +4,7 @@ from django.urls import path
 
 from .import views
 
-app_name = 'tech_journal' # This line allows Django to distinguish this urls.py file from other urls.py files in the project.
+app_name = 'learning_logs' # This line allows Django to distinguish this urls.py file from other urls.py files in the project.
 urlpatterns = [
     # Home page.
     path('', views.index, name='index'), # The name 'index' allows us to refer to this URL pattern when building links in templates.

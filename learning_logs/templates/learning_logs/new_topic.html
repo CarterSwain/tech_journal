@@ -1,9 +1,9 @@
-{% extends 'tech_journal/base.html' %}
+{% extends 'learning_logs/base.html' %}
 
 {% block content %}
     <p>Add a new topic:</p>
     
-    <form action="{% url 'tech_journal:new_topic' %}" method='post'>
+    <form action="{% url 'learning_logs:new_topic' %}" method='post'>
         {% csrf_token %} 
         {{ form.as_div }}
         <button name='submit'>Add topic</button>

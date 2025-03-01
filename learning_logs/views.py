@@ -5,20 +5,20 @@ from .forms import TopicForm, EntryForm
 
 def index(request):
     """The home page for Tech Journal."""
-    return render(request, 'tech_journal/index.html')
+    return render(request, 'learning_logs/index.html')
 
 def topics(request):
     """Show all topics."""
     topics = Topic.objects.order_by('date_added')
     context = {'topics': topics}
-    return render(request, 'tech_journal/topics.html', context)
+    return render(request, 'learning_logs/topics.html', context)
 
 def topic(request, topic_id): # topic_id is a parameter that matches the value captured by the regex in the URL pattern.
     """Show a single topic and all its entries."""
     topic = Topic.objects.get(id=topic_id) # Retrieve the topic with the id captured by the URL pattern.
     entries = topic.entry_set.order_by('-date_added') 
     context = {'topic': topic, 'entries': entries} # Pass the topic and its associated entries to the template.
-    return render(request, 'tech_journal/topic.html', context)
+    return render(request, 'learning_logs/topic.html', context)
 
 def new_topic(request):
     """Add a new topic."""
@@ -30,11 +30,11 @@ def new_topic(request):
         form = TopicForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('tech_journal:topics') # Redirect the user to the topics page.
+            return redirect('learning_logs:topics') # Redirect the user to the topics page.
     
     # Display a blank or invalid form.
     context = {'form': form}
-    return render(request, 'tech_journal/new_topic.html', context)
+    return render(request, 'learning_logs/new_topic.html', context)
 
 def new_entry(request, topic_id):
     """Add a new entry for a particular topic."""
@@ -50,11 +50,11 @@ def new_entry(request, topic_id):
             new_entry = form.save(commit=False)
             new_entry.topic = topic
             new_entry.save()
-            return redirect('tech_journal:topic', topic_id=topic_id)
+            return redirect('learning_logs:topic', topic_id=topic_id)
     
     # Display a blank or invalid form.
     context = {'topic': topic, 'form': form}
-    return render(request, 'tech_journal/new_entry.html', context)
+    return render(request, 'learning_logs/new_entry.html', context)
 
 def edit_entry(request, entry_id):
     """Edit an existing entry."""
@@ -69,7 +69,7 @@ def edit_entry(request, entry_id):
         form = EntryForm(instance=entry, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('tech_journal:topic', topic_id=topic.id)
+            return redirect('learning_logs:topic', topic_id=topic.id)
     
     context = {'entry': entry, 'topic': topic, 'form': form}
-    return render(request, 'tech_journal/edit_entry.html', context)
+    return render(request, 'learning_logs/edit_entry.html', context)
