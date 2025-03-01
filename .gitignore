@@ -1,6 +1,8 @@
 # Virtual environment
 venv/
 env/
+ll_env/
+
 
 # Django-specific files
 *.pyc
