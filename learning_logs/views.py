@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
@@ -11,13 +12,17 @@ def index(request):
 @login_required
 def topics(request):
     """Show all topics."""
-    topics = Topic.objects.order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).order_by('date_added') # Retrieve only the topics owned by the current user.
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
 
+@login_required
 def topic(request, topic_id): # topic_id is a parameter that matches the value captured by the regex in the URL pattern.
     """Show a single topic and all its entries."""
     topic = Topic.objects.get(id=topic_id) # Retrieve the topic with the id captured by the URL pattern.
+    # Make sure the topic belongs to the current user.
+    if topic.owner != request.user:
+        raise Http404
     entries = topic.entry_set.order_by('-date_added') 
     context = {'topic': topic, 'entries': entries} # Pass the topic and its associated entries to the template.
     return render(request, 'learning_logs/topic.html', context)
@@ -32,7 +37,9 @@ def new_topic(request):
         # POST data submitted; process data.
         form = TopicForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_topic = form.save(commit=False) # Create a new topic object and assign it to new_topic without saving it to the database.
+            new_topic.owner = request.user # Assign the current user to the new topic.
+            new_topic.save() # Save the new topic to the database.
             return redirect('learning_logs:topics') # Redirect the user to the topics page.
     
     # Display a blank or invalid form.
@@ -65,7 +72,8 @@ def edit_entry(request, entry_id):
     """Edit an existing entry."""
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
-    
+    if topic.owner != request.user:
+        raise Http404
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         form = EntryForm(instance=entry)

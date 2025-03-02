@@ -1,3 +1,1 @@
-from django.db import models
-
-# Create your models here.
+# Add Account models like Profile, etc. to the admin site.
