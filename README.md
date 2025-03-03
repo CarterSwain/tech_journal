@@ -15,7 +15,9 @@ A personal learning log for documenting your coding journey. Built with Django, 
 🛠 Tech Stack
 
 Backend: Django, PostgreSQL
+
 Frontend: HTML, CSS, Bootstrap
+
 Deployment: Platform.sh
 
 🏗 Installation & Setup
