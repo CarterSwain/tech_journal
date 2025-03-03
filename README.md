@@ -1,13 +1,19 @@
 Tech Journal 
+
 A personal learning log for documenting your coding journey. Built with Django, this app helps users track what they learn, organize entries by topic, and reflect on their progress.
 
-🚀 Features
+🚀 Features:
+
 📝 Create & Manage Entries – Log your daily coding experiences.
+
 📂 Organize by Topics – Categorize your entries for easy reference.
-🔍 Search & Filter – Quickly find past learning notes.
+
 👤 User Authentication – Secure personal journal with login/signup.
+
 📊 Progress Reflection – Track your learning over time.
+
 🛠 Tech Stack
+
 Backend: Django, PostgreSQL
 Frontend: HTML, CSS, Bootstrap
 Deployment: Platform.sh
